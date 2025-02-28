@@ -43,7 +43,7 @@ export function MenuSide() {
             </li>
 
             <li>
-              <a href="/logout" onClick={e=> fn_logout(e)}><img src={ICON_9} alt="" /><strong class="special">Logout</strong> </a>
+              <a href="/logout" onClick={e=> fn_logout(e)}><img src={ICON_9} alt="" /><strong class="special">Disconnect</strong> </a>
             </li>
 
           </ul>

@@ -78,23 +78,24 @@ export function sign_tx(tx) {
 	return bls.sign(tx, sk, {DST: "AMADEUS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_TX_"});
 }
 
-export function build_tx() {
-	var sol_raw = window.crypto.getRandomValues(new Uint8Array(256));
+export function build_tx(contract, func, args) {
 	const tx = {
 		signer: globalState.pk,
 		nonce: window.BigInt(Date.now()) * 1_000_000n,
-		actions: [{op: "call", contract: "Epoch", function: "submit_sol", args: [sol_raw]}]
+		actions: [{op: "call", contract: contract, function: func, args: args}]
 	}
 
   const tx_encoded = canonicalSerialize(tx);
   const hash = blake3(tx_encoded);
 	const signature = sign_tx(hash);
 
-	const tx_packed = canonicalSerialize({tx: tx, hash: hash, signature: signature});
+	const tx_packed = canonicalSerialize({tx_encoded: tx_encoded, hash: hash, signature: signature});
 
-	console.log(hash, signature);
-	console.log(tx_packed);
-	console.log(to_b58(tx_packed));
+	//console.log(hash, signature);
+	//console.log(tx_packed);
+	//console.log(to_b58(tx_packed));
+
+	return tx_packed;
 }
 
 export async function api_node(node_url, path, body, token) {

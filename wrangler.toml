@@ -1,0 +1,22 @@
+name = "amadeus_wallet"
+# type = "javascript" is required to use the `[build]` section
+type = "javascript"
+account_id = "20bf2f5d11d26a322e389687896a6601"
+workers_dev = true
+route = "wallet.amadeus.bot/*"
+zone_id = "f0ee2fc6c3a2d3e67be33881564c03de"
+kv_namespaces = [
+]
+usage_model = "unbound"
+
+[build]
+command = "npm install && npm run build"
+
+[build.upload]
+# The "modules" upload format is required for all projects that export a Durable Object class.
+format = "modules"
+main = "./shim.mjs"
+
+[[build.upload.rules]]
+type = "Text"
+globs = ["html/index.html"]
