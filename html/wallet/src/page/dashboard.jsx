@@ -11,7 +11,7 @@ async function fn_transfer(e) {
 		if (!isNaN(amount)) {
 			if (window.confirm(`You will send ${amount} to ${pk}`)) {
 				amount = amount * 1_000_000_000;
-				const packed_tx = build_tx("Coin", "transfer", ["AMA", from_b58(pk), amount.toString()]);
+				const packed_tx = build_tx("Coin", "transfer", [from_b58(pk), amount.toString(), "AMA"]);
 				var result = await fetch(`https://nodes.amadeus.bot/api/tx/submit/${to_b58(packed_tx)}`)
 				result = await result.json()
 				console.log(result);
