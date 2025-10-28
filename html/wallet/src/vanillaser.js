@@ -6,13 +6,13 @@ const TYPE_BYTES  = 0x05;
 const TYPE_LIST  = 0x06;
 const TYPE_OBJECT = 0x07;
 
-export function canonicalSerialize(value) {
+function canonicalSerialize(value) {
   const bytesOut = [];
   encodeValue(value, bytesOut);
   return new Uint8Array(bytesOut);
 }
 
-export function canonicalDeserialize() {
+function canonicalDeserialize() {
 }
 
 function appendBytes(out, bytes) {
@@ -67,6 +67,20 @@ function decodeVarint(data, ref) {
   return value;
 }
 
+function compareBytes(a, b) {
+  const n = Math.min(a.length, b.length);
+  for (let i = 0; i < n; i++) {
+    if (a[i] !== b[i]) return a[i] - b[i]; // unsigned lexicographic compare
+  }
+  return a.length - b.length; // shorter wins if prefix equal
+}
+
+function encodeKeyBytes(k) {
+  const tmp = [];
+  encodeValue(k, tmp); // use the SAME logic you use when emitting keys to 'out'
+  return tmp;
+}
+
 function encodeValue(value, out) {
   if (value === null) {
     out.push(TYPE_NULL);
@@ -91,17 +105,14 @@ function encodeValue(value, out) {
       encodeValue(element, out);
     }
   } else if (typeof value === 'object') {
-    const keys = Object.keys(value).sort();
+    const entries = Object.keys(value).map(k => ({k, bytes: encodeKeyBytes(k)}));
+    entries.sort((a, b) => compareBytes(a.bytes, b.bytes));
 
     out.push(TYPE_OBJECT);
-    encodeVarint(keys.length, out);
-    for (const k of keys) {
-			encodeValue(k, out);
-      //const utf8 = new TextEncoder().encode(k);
-      //encodeVarint(utf8.length, out);
-      //appendBytes(out, utf8);
-
-      encodeValue(value[k], out);
+    encodeVarint(entries.length, out);
+    for (const key of entries) {
+      encodeValue(key.k, out);
+      encodeValue(value[key.k], out);
     }
   } else {
     throw new Error(`Unsupported type: ${typeof value}`);
