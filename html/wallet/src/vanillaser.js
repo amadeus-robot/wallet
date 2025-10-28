@@ -6,13 +6,13 @@ const TYPE_BYTES  = 0x05;
 const TYPE_LIST  = 0x06;
 const TYPE_OBJECT = 0x07;
 
-function canonicalSerialize(value) {
+export function canonicalSerialize(value) {
   const bytesOut = [];
   encodeValue(value, bytesOut);
   return new Uint8Array(bytesOut);
 }
 
-function canonicalDeserialize() {
+export function canonicalDeserialize() {
 }
 
 function appendBytes(out, bytes) {
@@ -70,14 +70,14 @@ function decodeVarint(data, ref) {
 function compareBytes(a, b) {
   const n = Math.min(a.length, b.length);
   for (let i = 0; i < n; i++) {
-    if (a[i] !== b[i]) return a[i] - b[i]; // unsigned lexicographic compare
+    if (a[i] !== b[i]) return a[i] - b[i];
   }
   return a.length - b.length; // shorter wins if prefix equal
 }
 
 function encodeKeyBytes(k) {
   const tmp = [];
-  encodeValue(k, tmp); // use the SAME logic you use when emitting keys to 'out'
+  encodeValue(k, tmp);
   return tmp;
 }
 
