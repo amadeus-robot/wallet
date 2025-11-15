@@ -11,7 +11,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "4.0.3",
-    "tweetnacl": "^1.0.3"
+    "tweetnacl": "^1.0.3",
+    "@amadeus/vecpak-js": "https://gitpkg.now.sh/amadeusprotocol/chain/vecpak/bindings/js?main"
   },
   "scripts": {
     "start": "craco start",
@@ -27,11 +28,11 @@
   },
   "browserslist": {
     "production": [
-	    "chrome >= 67",
-	    "edge >= 79",
-	    "firefox >= 68",
-	    "opera >= 54",
-	    "safari >= 14"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",

@@ -1,7 +1,7 @@
 import { bls12_381 as bls } from '@noble/curves/bls12-381';
 import { blake3 } from '@noble/hashes/blake3';
 import { globalState, setGlobalState } from './state.js'
-import { canonicalSerialize, canonicalDeserialize } from './vanillaser.js'
+import { encode, decode } from "@amadeus/vecpak-js";
 
 export var SEED64_TEMPORAL;
 
@@ -85,11 +85,11 @@ export function build_tx(contract, func, args) {
 		actions: [{op: "call", contract: contract, function: func, args: args}]
 	}
 
-  const tx_encoded = canonicalSerialize(tx);
+  const tx_encoded = encode(tx);
   const hash = blake3(tx_encoded);
 	const signature = sign_tx(hash);
 
-	const tx_packed = canonicalSerialize({tx_encoded: tx_encoded, hash: hash, signature: signature});
+	const tx_packed = encode({tx_encoded: tx_encoded, hash: hash, signature: signature});
 
 	//console.log(hash, signature);
 	//console.log(tx_packed);
